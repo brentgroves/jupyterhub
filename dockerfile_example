@@ -1,0 +1,42 @@
+# https://github.com/brentgroves/jupyterhub.github
+# https://hub.docker.com/u/jupyter
+# https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html
+FROM jupyter/all-spark-notebook:2022-04-04
+# docker pull jupyter/all-spark-notebook:2022-04-04
+#docker run -it -p 8888:8888 jupyter/all-spark-notebook:2022-04-04
+# https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/customizing/user-environment.html#choose-and-use-an-existing-docker-image
+# Replace `latest` with an image tag from to ensure reproducible builds:
+# syntax=docker/dockerfile:1
+FROM golang:1.16-alpine AS build
+
+# Install tools required for project
+# Run `docker build --no-cache .` to update dependencies
+RUN apk add --no-cache git
+RUN go get github.com/golang/dep/cmd/dep
+
+# List project dependencies with Gopkg.toml and Gopkg.lock
+# These layers are only re-built when Gopkg files are updated
+COPY Gopkg.lock Gopkg.toml /go/src/project/
+WORKDIR /go/src/project/
+# Install library dependencies
+RUN dep ensure -vendor-only
+
+# Copy the entire project and build it
+# This layer is rebuilt when a file changes in the project directory
+COPY . /go/src/project/
+RUN go build -o /bin/project
+
+# This results in a single layer image
+FROM scratch
+COPY --from=build /bin/project /bin/project
+ENTRYPOINT ["/bin/project"]
+CMD ["--help"]
+
+# install additional package...
+RUN pip install --no-cache-dir astropy
+
+# set the default command of the image,
+# if the parent image will not launch a jupyterhub singleuser server.
+# The JupyterHub "Docker stacks" do not need to be overridden.
+# Set either here or in `singleuser.cmd` in your values.yaml
+# CMD ["jupyterhub-singleuser"]

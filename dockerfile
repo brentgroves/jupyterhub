@@ -1,17 +1,24 @@
-# https://github.com/brentgroves/jupyterhub.github
-# https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html
-FROM jupyter/all-spark-notebook:latest
-# docker pull jupyter/all-spark-notebook:latest
-# https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/customizing/user-environment.html#choose-and-use-an-existing-docker-image
-FROM jupyter/minimal-notebook:latest
+FROM jupyter/all-spark-notebook:2022-04-04 
 # Replace `latest` with an image tag from to ensure reproducible builds:
 # https://hub.docker.com/r/jupyter/minimal-notebook/tags/
 # Inspect the Dockerfile at:
 # https://github.com/jupyter/docker-stacks/tree/HEAD/minimal-notebook/Dockerfile
-
+# ENV MY_NAME="John Doe"
+USER root
+ENV GRANT_SUDO="yes"
 # install additional package...
-RUN pip install --no-cache-dir astropy
+# RUN pip install --no-cache-dir astropy
 
+# Install tools required for project
+# Run `docker build --no-cache .` to update dependencies
+RUN sudo apt-get update && apt-get install -y \
+  neofetch
+#   bzr \
+#   cvs \
+#   git \
+#   mercurial \
+#   subversion \
+#   && rm -rf /var/lib/apt/lists/*
 # set the default command of the image,
 # if the parent image will not launch a jupyterhub singleuser server.
 # The JupyterHub "Docker stacks" do not need to be overridden.
