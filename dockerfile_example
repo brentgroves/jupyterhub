@@ -4,6 +4,7 @@
 FROM jupyter/all-spark-notebook:2022-04-04
 # docker pull jupyter/all-spark-notebook:2022-04-04
 #docker run -it -p 8888:8888 jupyter/all-spark-notebook:2022-04-04
+#docker run -it -p 8888:8888 jhtest
 # https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/customizing/user-environment.html#choose-and-use-an-existing-docker-image
 # Replace `latest` with an image tag from to ensure reproducible builds:
 # syntax=docker/dockerfile:1
