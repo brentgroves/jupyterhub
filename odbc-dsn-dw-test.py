@@ -9,7 +9,7 @@ import pyodbc
 # database = 'mgdw' 
 username = 'mgadmin' 
 password = 'WeDontSharePasswords1!' 
-cnxn = pyodbc.connect('DSN=dw2;UID='+username+';PWD='+ password)
+cnxn = pyodbc.connect('DSN=dw;UID='+username+';PWD='+ password)
 
 cursor = cnxn.cursor()
 #Sample select query
