@@ -1,24 +1,17 @@
-# This file can update the JupyterHub Helm chart's default configuration values.
-#
-# For reference see the configuration reference and default values, but make
-# sure to refer to the Helm chart version of interest to you!
-#
-# Introduction to YAML:     https://www.youtube.com/watch?v=cdLNKUoMc6c
-# Chart config reference:   https://zero-to-jupyterhub.readthedocs.io/en/stable/resources/reference.html
-# Chart default values:     https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/values.yaml
-# Available chart versions: https://jupyterhub.github.io/helm-chart/
-# https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/customizing/extending-jupyterhub.html#apply-config-changes
 singleuser:
+  # Defines the default image
   image:
-    # You should replace the "latest" tag with a fixed version from:
-    # https://hub.docker.com/r/jupyter/datascience-notebook/tags/
-    # Inspect the Dockerfile at:
-    # https://github.com/jupyter/docker-stacks/tree/HEAD/datascience-notebook/Dockerfile
-    name: brentgroves/jupyterhub
-    tag: "1.0"
-hub:
-  config:
-    Authenticator:
-      admin_users:
-        - adminuser1
-        - adminuser2
+    name: jupyter/minimal-notebook
+    tag: 2343e33dec46
+  profileList:
+    - display_name: "Minimal environment"
+      description: "To avoid too much bells and whistles: Python."
+      default: true
+    - display_name: "Datascience environment"
+      description: "If you want the additional bells and whistles: Python, R, and Julia."
+      kubespawner_override:
+        image: jupyter/datascience-notebook:2343e33dec46
+    - display_name: "test environment"
+      description: "If you want the additional bells and whistles: Python, R, and Julia."
+      kubespawner_override:
+        image: brentgroves/jupyterhub:1.0
