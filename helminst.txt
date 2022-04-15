@@ -12,10 +12,11 @@ helm upgrade --cleanup-on-fail \
 how to change
 modify config.yaml
 then run 
+
 helm upgrade --cleanup-on-fail \
-  helm-release-frt jupyterhub/jupyterhub \
+    helm-release-frt jupyterhub/jupyterhub \
   --namespace k8s-namespace-frt \
-  --version=1.0 \
+  --version=1.2.0 \
   --values config.yaml
 
 Thank you for installing JupyterHub!
