@@ -9,6 +9,8 @@ https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/customizing/user-
 
 
 conda env list
+source .bashrc
+
 conda install nb_conda_kernels
 conda create -n myenv python=3.10
 conda activate myenv
@@ -19,7 +21,26 @@ envs_dirs:
   - /home/jovyan/my-conda-envs/
 
 Questions:
+How are different users handled?  Each one gets a new pod.
 
+After env got working will a new user see them?
+
+How are env handled in JupyterLab? https://github.com/Anaconda-Platform/nb_conda_kernels
+nb_conda_kernels
+This extension enables a Jupyter Notebook or JupyterLab application in one conda environment to access kernels for Python, R, and other languages found in other environments. When a kernel from an external environment is selected, the kernel conda environment is automatically activated before the kernel is launched. This allows you to utilize different versions of Python, R, and other languages from a single Jupyter installation.
+
+The package works by defining a custom KernelSpecManager that scans the current set of conda environments for kernel specifications. It dynamically modifies each KernelSpec so that it can be properly run from the notebook environment. When you create a new notebook, these modified kernels will be made available in the selection list.
+
+This package is designed to be managed solely using conda. It should be installed in the environment from which you run Jupyter Notebook or JupyterLab. This might be your base conda environment, but it need not be. For instance, if the environment notebook_env contains the notebook package, then you would run
+
+conda install nb_conda_kernels
+conda install -n manim nb_conda_kernels
+
+
+
+Debug:
+https://kubernetes.io/docs/tasks/debug-application-cluster/get-shell-running-container/
+kubectl exec --stdin --tty jupyter-t3 -- /bin/bash
 
 https://zero-to-jupyterhub.readthedocs.io/en/latest/
 
@@ -64,6 +85,8 @@ If you have questions, please:
   2. Ask for help or chat to us on https://discourse.jupyter.org/
   3. If you find a bug please report it at https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues
 
+How do you stop a release? you dont
+https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
 
 
 How do find releases.
