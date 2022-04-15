@@ -78,8 +78,8 @@ hub:
   extraVolumes: []
   extraVolumeMounts: []
   image:
-    name: brentgroves/jupyterhub
-    tag: "1.0"
+    name: jupyterhub/k8s-hub
+    tag: "1.2.0"
     pullPolicy:
     pullSecrets: []
   resources: {}
