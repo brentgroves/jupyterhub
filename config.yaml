@@ -11,7 +11,7 @@ singleuser:
       description: "If you want the additional bells and whistles: Python, R, and Julia."
       kubespawner_override:
         image: jupyter/datascience-notebook:2343e33dec46
-    - display_name: "test environment"
-      description: "If you want the additional bells and whistles: Python, R, and Julia."
+    - display_name: "Mobex IS environment"
+      description: "This has ETL, Manim, Python, R, and Julia kernels."
       kubespawner_override:
-        image: brentgroves/jupyterhub:1.0
+        image: brentgroves/jupyterhub:1.1
