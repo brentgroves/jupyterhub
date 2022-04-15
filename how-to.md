@@ -1,3 +1,25 @@
+nano ~/.condarc
+envs_dirs:
+  - /home/jovyan/my-conda-envs/
+TRY MAKING ANOTHER IMAGE with nb_conda_kernals in the base
+and copy .condarc file to /home/jovyan 
+think about Using nbgitpuller to synchronize a folder
+
+https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/customizing/user-environment.html
+
+
+conda env list
+conda install nb_conda_kernels
+conda create -n myenv python=3.10
+conda activate myenv
+source .bashrc
+conda activate manim
+ipython kernel install --user --name=manim
+
+
+
+envs_dirs:
+  - /home/jovyan/my-conda-envs/
 docker run -it --rm \
     -p 8888:8888 \
     --user root \

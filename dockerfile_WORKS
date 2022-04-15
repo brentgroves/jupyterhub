@@ -100,22 +100,13 @@ ENV ODBCINI="/usr/oaodbc81/odbc64.ini"
 
 # Switch back to jovyan to avoid accidental container runs as root
 # don't need to be root for pip install
-# USER ${NB_UID}
+USER ${NB_UID}
 
 # install additional package...
 # Install Python 3 packages
 # https://docs.manim.community/en/stable/installation.html
 # https://www.dmcinfo.com/latest-thinking/blog/id/9388/how-to-upload-a-file-to-sharepoint-on-premises-using-python
 # Create the environment:
-# COPY env-base.yml .
-# RUN conda env create -f env-base.yml
-
-# # Make RUN commands use the new environment:
-# # https://docs.conda.io/projects/conda/en/latest/commands/run.html
-# SHELL ["conda", "run", "-n", "base", "/bin/bash", "-c"]
-
-# RUN ipython kernel install --user --name=base
-
 COPY env-etl.yml .
 RUN conda env create -f env-etl.yml
 
