@@ -116,6 +116,26 @@ ENV ODBCINI="/usr/oaodbc81/odbc64.ini"
 
 # RUN ipython kernel install --user --name=base
 
+# Switch back to jovyan so that he is installing packages and not root
+USER ${NB_UID}
+
+COPY ./.condarc /home/jovyan/
+
+RUN conda install --quiet --yes \
+  'nb_conda_kernels' \
+  'zeep' \
+  'requests' \
+  'requests_ntlm' \
+  'pyodbc' \
+  'pandas' \
+  'ipykernel'
+
+
+# this creates .bashrc with code to launch the conda.sh
+# THIS WONT WORK FROM A DOCKERFILE
+# RUN conda init bash 
+# RUN source .bashrc
+
 COPY env-etl.yml .
 RUN conda env create -f env-etl.yml
 
@@ -160,7 +180,7 @@ SHELL ["conda", "run", "-n", "base", "/bin/bash", "-c"]
 # ODBCINI=/usr/oaodbc81/odbc64.ini; export ODBCINI
 # RUN source /usr/oaodbc81/oaodbc64.sh THIS DOES NOT DO ANYTHING
 
-# Switch back to jovyan to avoid accidental container runs as root
+# # Switch back to jovyan to avoid accidental container runs as root
 # USER ${NB_UID}
 
 

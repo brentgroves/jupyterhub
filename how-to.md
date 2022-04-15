@@ -5,16 +5,40 @@ TRY MAKING ANOTHER IMAGE with nb_conda_kernals in the base
 and copy .condarc file to /home/jovyan 
 think about Using nbgitpuller to synchronize a folder
 
+If 2 people login with the same username they can see what each other is typing in a terminal but 
+they can't see the updates to a notebook.
+What happens when a user logs out? Sometimes his pod disappears. But if he logs in again it reappears.
+If he logs in again after his pod disappears he will have to select an environment again.
+What happens if when he logs in he selects a new environment?
+
 https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/customizing/user-environment.html
+ipython was update. this may be a problem. 
+Original jupyterhub version: 6.11.0-py39hef51801_2 
+after ipython was installed: Installed kernelspec etl in /home/jovyan/.local/share/jupyter/kernels/etl
+the only difference from 1.0 is that I believe nb_conda_kernels was installed in the base environment and 
+the .condarc file was created.
+I ran this as a local server and saw that there were 2 kernels for every environment 1 jovyan and 1 for root.
+and both etl and manim showed up in /home/jovyan/my-conda-envs/.
 
-
-conda env list
-source .bashrc
+Add these steps to dockerfile:
 
 conda install nb_conda_kernels
+create /home/jovyan/.condarc
+envs_dirs:
+  - /home/jovyan/my-conda-envs/
+conda init bash // this modified/created .bashrc
+source .bashrc
+ipython kernel install --user --name=myenv
+Installed kernelspec myenv in /home/jovyan/.local/share/jupyter/kernels/myenv
+conda activate manim
+ipython kernel install --user --name=manim
+Installed kernelspec myenv in /home/jovyan/.local/share/jupyter/kernels/manim
+conda activate etl
+ipython kernel install --user --name=etl
+Installed kernelspec myenv in /home/jovyan/.local/share/jupyter/kernels/etl
+
 conda create -n myenv python=3.10
 conda activate myenv
-source .bashrc
 conda activate manim
 ipython kernel install --user --name=manim
 envs_dirs:
@@ -22,8 +46,15 @@ envs_dirs:
 
 Questions:
 How are different users handled?  Each one gets a new pod.
+There prompt is jovyan@jupyter-username and there is a .cache,.ipython,.jupyter,and .local/share/jupyter/runtime/jpserver-9.json file
+base_url:/usr/env3
+pid:9
+root_dir:/home/jovyan
+url:http://jupyter-env3:8888/usr/env3
 
-After env got working will a new user see them?
+/etc/environment contains the path
+
+After env got working will a new user see them? No.
 
 How are env handled in JupyterLab? https://github.com/Anaconda-Platform/nb_conda_kernels
 nb_conda_kernels
