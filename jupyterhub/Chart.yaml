@@ -2,7 +2,7 @@ annotations:
   artifacthub.io/images: |
     - image: jupyterhub/configurable-http-proxy:4.5.0
       name: configurable-http-proxy
-    - image: brentgroves/jupyterhub:1.0
+    - image: jupyterhub/k8s-hub:1.2.0
       name: k8s-hub
     - image: jupyterhub/k8s-image-awaiter:1.2.0
       name: k8s-image-awaiter
