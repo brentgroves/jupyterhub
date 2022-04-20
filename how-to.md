@@ -183,8 +183,14 @@ helm upgrade --cleanup-on-fail \
 
 
 How do you uninstall a release?
+kubectl --namespace=k8s-namespace-frt get all // check the resources before the uninstall
 It removes all of the resources associated with the last release of the chart as well as the release history, freeing it up for future use.
 helm uninstall helm-release-frt --namespace k8s-namespace-frt
+kubectl --namespace=k8s-namespace-frt get all  // make sure all the resources were removed.
+I noticed everything was deleted except the running pod.
+so delete the namespace to delete the pod.
+kubectl delete namespace k8s-namespace-frt
+
 
 How do you delete a namespace?
 kubectl delete namespace k8s-namespace-frt

@@ -118,29 +118,57 @@ ENV ODBCINI="/usr/oaodbc81/odbc64.ini"
 
 # Switch back to jovyan so that he is installing packages and not root
 USER ${NB_UID}
-
+WORKDIR /home/jovyan
+# Since I did not have the WORKDIR command .condarc went to /root maybe this is
+# why I have a [conda env:root] kernel
 COPY ./.condarc /home/jovyan/
 
-RUN conda install --quiet --yes \
-  'nb_conda_kernels' \
-  'zeep' \
-  'requests' \
-  'requests_ntlm' \
-  'pyodbc' \
-  'pandas' \
-  'ipykernel'
+# These files are available to jovyan
+# These packages are in the base env
+# RUN conda install --quiet --yes \
+#   'nb_conda_kernels' \
+#   'zeep' \
+#   'requests' \
+#   'requests_ntlm' \
+#   'pyodbc' \
+#   'pandas' \
+#   'ipykernel'
+# https://stackoverflow.com/questions/55123637/activate-conda-environment-in-docker
 
+# Since, conda run is an experimental feature the correct way is to add this line to your Dockerfile
+# SHELL [ "/bin/bash", "--login", "-c" ]
+# after this you can continue with
+# RUN conda init bash
+# and then continue to activate your environment with
+# RUN conda activate <env_name>
 
+# https://stackoverflow.com/questions/55123637/activate-conda-environment-in-docker
 # this creates .bashrc with code to launch the conda.sh
 # THIS WONT WORK FROM A DOCKERFILE
 # RUN conda init bash 
 # RUN source .bashrc
-
+# https://rc-docs.northeastern.edu/en/latest/software/conda.html#:~:text=To%20activate%20your%20Conda%20environment,Conda%20environment%2C%20type%20conda%20deactivate%20.
 COPY env-etl.yml .
 RUN conda env create -f env-etl.yml
 
 # Make RUN commands use the new environment:
 # https://docs.conda.io/projects/conda/en/latest/commands/run.html
+# Since, conda run is an experimental feature the correct way is to add this line to your Dockerfile
+# SHELL [ "/bin/bash", "--login", "-c" ]
+# after this you can continue with
+# RUN conda init bash
+# and then continue to activate your environment with
+# RUN conda activate <env_name>
+# if it works the environment is created in /home/jovyan/.local/share/jupyter/kernels
+# since /home/jovyan/.local/share/jupyter/kernels/etl was not created must have failed or been created somewhere else.
+# or for the base env 
+# Maybe since conda is initially installed as user root that is why the conda env:root kernel is installed?
+
+
+# https://stackoverflow.com/questions/67059518/configure-setting-activate-a-python-conda-environment-in-docker
+# Run an executable in a conda environment.
+# bash -c  If the -c option is present, then commands are read from string.
+# If there are arguments after the string, they are assigned to the positional parameters, starting with $0.
 SHELL ["conda", "run", "-n", "etl", "/bin/bash", "-c"]
 # Demonstrate the environment is activated:
 # https://stackoverflow.com/questions/53004311/how-to-add-conda-environment-to-jupyter-lab
@@ -151,8 +179,30 @@ SHELL ["conda", "run", "-n", "etl", "/bin/bash", "-c"]
 #   'pyodbc' \
 #   'pandas' \
 #   'ipykernel'
-
+# https://ipython.readthedocs.io/en/stable/install/kernel_install.html
 RUN ipython kernel install --user --name=etl
+# A ‘kernel’ is a program that runs and introspects the user’s code. IPython includes a kernel for Python code, and people have written kernels for several other languages.
+# When IPython starts a kernel, it passes it a connection file. This specifies how to set up communications with the frontend.
+# Kernel installs to /home/jovyan/.local/share/jupyter/kernels/
+# python -m runs the script in the below case ipykernel_launcher with a specific version of python
+# https://ipython.org/ipython-doc/3/development/kernels.html
+# /home/jovyan/.local/share/jupyter/kernels/etl/kernel.json  
+# {
+#  "argv": [
+#   "/home/jovyan/my-conda-envs/etl/bin/python",
+#   "-m",
+#   "ipykernel_launcher",
+#   "-f",
+#   "{connection_file}"
+#  ],
+#  "display_name": "etl",
+#  "language": "python",
+#  "metadata": {
+#   "debugger": true
+#  }
+# }
+# If I run the ipython command from a terminal the launcher sees it
+# https://ipython.readthedocs.io/en/stable/install/kernel_install.html
 # Make RUN commands use the base environment:
 # SHELL ["conda", "run", "-n", "base", "/bin/bash", "-c"]
 
@@ -162,7 +212,6 @@ RUN ipython kernel install --user --name=etl
 # Create the environment:
 COPY env-manim.yml .
 RUN conda env create -f env-manim.yml
-
 # Make RUN commands use the new environment:
 # https://docs.conda.io/projects/conda/en/latest/commands/run.html
 SHELL ["conda", "run", "-n", "manim", "/bin/bash", "-c"]
@@ -171,7 +220,11 @@ SHELL ["conda", "run", "-n", "manim", "/bin/bash", "-c"]
 RUN pip3 install manim 
 # RUN conda install ipykernel
 RUN ipython kernel install --user --name=manim
-# Make RUN commands use the base environment:
+# kernel installed to /home/jovyan/.local/share/jupyter/kernels/manim
+# 
+# Run an executable in a conda environment.
+# bash -c  If the -c option is present, then commands are read from string.
+# If there are arguments after the string, they are assigned to the positional parameters, starting with $0.
 SHELL ["conda", "run", "-n", "base", "/bin/bash", "-c"]
 
 # LD_LIBRARY_PATH=/usr/oaodbc81/lib64${LD_LIBRARY_PATH:+":"}${LD_LIBRARY_PATH:-""}
