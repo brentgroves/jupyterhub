@@ -1,0 +1,38 @@
+FROM jupyter/all-spark-notebook:2022-04-04 
+# I cant find conda init in any documentation but it creates/updates the .bashrc file to run conda.sh and adds /opt/conda/bin to the $PATH.
+RUN conda init bash
+WORKDIR /home/jovyan
+COPY ./.condarc .
+COPY ./env-etl.yml .
+# https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
+RUN conda env create -f env-etl.yml
+SHELL ["conda", "run", "-n", "etl", "/bin/bash", "-c"]
+# https://ipython.readthedocs.io/en/stable/install/kernel_install.html
+RUN ipython kernel install --user --name=etl
+# A ‘kernel’ is a program that runs and introspects the user’s code. IPython includes a kernel for Python code, 
+# and people have written kernels for several other languages.
+# When IPython starts a kernel, it passes it a connection file. This specifies how to set up communications with the frontend.
+# Kernel installs to /home/jovyan/.local/share/jupyter/kernels/
+# python -m runs the script in the below case ipykernel_launcher with a specific version of python
+# https://ipython.org/ipython-doc/3/development/kernels.html
+# /home/jovyan/.local/share/jupyter/kernels/etl/kernel.json  
+# {
+#  "argv": [
+#   "/home/jovyan/my-conda-envs/etl/bin/python",
+#   "-m",
+#   "ipykernel_launcher",
+#   "-f",
+#   "{connection_file}"
+#  ],
+#  "display_name": "etl",
+#  "language": "python",
+#  "metadata": {
+#   "debugger": true
+#  }
+# }
+
+# set the default command of the image,
+# if the parent image will not launch a jupyterhub singleuser server.
+# The JupyterHub "Docker stacks" do not need to be overridden.
+# Set either here or in `singleuser.cmd` in your values.yaml
+# CMD ["jupyterhub-singleuser"]
