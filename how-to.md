@@ -120,6 +120,7 @@ How do you stop a release? you dont
 https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
 
 
+
 How do find releases.
 Your release is named "helm-release-frt" and installed into the namespace "k8s-namespace-frt".
 helm list --namespace=k8s-namespace-frt
