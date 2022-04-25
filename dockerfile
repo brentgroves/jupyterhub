@@ -86,9 +86,9 @@ RUN pip3 install manim \
 #     && pip3 install manim \
 #     && ipython kernel install --user --name=manim --display-name "Python (manim)" 
 
-RUN chmod 777 /opt/conda/envs
-RUN chmod 777 /opt/conda/envs/etl
-RUN chmod 777 /opt/conda/envs/manim
+RUN chmod -R 777 /opt/conda/envs
+# RUN chmod 777 /opt/conda/envs/etl 
+# RUN chmod 777 /opt/conda/envs/manim
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER ${NB_UID}
