@@ -1,6 +1,7 @@
 name: etl
 channels:
   - conda-forge
+  - anaconda
 dependencies:
   - python=3.10
   - zeep
@@ -9,3 +10,6 @@ dependencies:
   - pyodbc
   - pandas
   - ipykernel
+  - ipython-sql 
+  - matplotlib   
+  - sqlalchemy

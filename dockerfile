@@ -67,8 +67,11 @@ RUN conda install --quiet --yes nb_conda_kernels \
 SHELL ["conda", "run", "-n", "etl", "/bin/bash", "-c"]
 #jupyter kernelspec uninstall python3 
 
-RUN conda install --quiet --yes ipykernel \
-    && ipython kernel install --user --name=etl --display-name "Python (ETL)"
+# RUN conda install --quiet --yes ipykernel \
+    # && conda install --quiet --yes -c conda-forge ipython-sql matplotlib \
+    # && conda install --quiet --yes -c anaconda sqlalchemy \
+    # && ipython kernel install --user --name=etl --display-name "Python (ETL)"
+RUN ipython kernel install --user --name=etl --display-name "Python (ETL)"
 
 COPY env-manim.yml .
 RUN conda env create -f env-manim.yml
@@ -76,9 +79,16 @@ RUN conda env create -f env-manim.yml
 SHELL ["conda", "run", "-n", "manim", "/bin/bash", "-c"]
 #jupyter kernelspec uninstall python3 
 
-RUN conda install --quiet --yes ipykernel \
-    && pip3 install manim \
+RUN pip3 install manim \
     && ipython kernel install --user --name=manim --display-name "Python (manim)" 
+
+# RUN conda install --quiet --yes ipykernel \
+#     && pip3 install manim \
+#     && ipython kernel install --user --name=manim --display-name "Python (manim)" 
+
+RUN chmod 777 /opt/conda/envs
+RUN chmod 777 /opt/conda/envs/etl
+RUN chmod 777 /opt/conda/envs/manim
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER ${NB_UID}
