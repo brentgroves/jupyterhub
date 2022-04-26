@@ -7,4 +7,4 @@ singleuser:
     - display_name: "Mobex IS environment"
       description: "This has ETL, Manim, Python, R, and Julia kernels."
       kubespawner_override:
-        image: brentgroves/jupyterhub:8
+        image: brentgroves/jupyterhub:10
