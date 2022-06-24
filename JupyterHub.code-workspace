@@ -1,0 +1,29 @@
+{
+	"folders": [
+		{
+			"name": "PlexWSUsingPython",
+			"path": "../../srcpy/PlexWSUsingPython"
+		},
+		{
+			"name": "PlexETLScripts",
+			"path": "../../srcps/PlexETLScripts"
+		},
+		{
+			"name": "jupyterhub",
+			"path": "."
+		},
+		{
+			"name": "k8s-train",
+			"path": "../k8s-train"
+		},
+		{
+			"name": "UDPServer",
+			"path": "../UDPServer"
+		},
+		{
+			"name": "UDPClient",
+			"path": "../UDPClient"
+		}
+	],
+	"settings": {}
+}
